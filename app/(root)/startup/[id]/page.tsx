@@ -8,6 +8,7 @@ import React, { Suspense } from 'react'
 import markdownit from "markdown-it";
 import { Skeleton } from '@/components/ui/skeleton';
 import View from '@/components/View';
+import ViewCounter from '@/components/ViewCounter';
 
 const md = markdownit();
 
@@ -79,6 +80,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
         <Suspense fallback={<Skeleton className="view_skeleton" />}>
           <View id={id} />
+          <ViewCounter id={id} />
         </Suspense>
       </section>
     </>
