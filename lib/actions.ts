@@ -29,8 +29,9 @@ export const createPitch = async (
       description,
       category,
       image: link,
+      views: 1,
       slug: {
-        _type: slug,
+        _type: "slug",
         current: slug,
       },
       author: {

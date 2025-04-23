@@ -16,7 +16,7 @@
   }
 
   .text-30-extrabold {
-    @apply text-[30px] font-extrabold text-neutral-100;
+    @apply text-[30px] font-extrabold;
   }
 
   .text-30-bold {
@@ -44,7 +44,7 @@
   }
 
   .text-14-normal {
-    @apply font-normal text-sm text-neutral-500;
+    @apply font-medium text-sm text-black;
   }
 
   .green_container {
@@ -84,7 +84,7 @@
   }
 
   .profile_card {
-    @apply w-80 px-6 pb-8 pt-24 flex flex-col justify-center items-center bg-gradient-to-br from-primary via-white to-primary border-4 border-neutral-800 shadow-2xl rounded-[32px] relative z-0 h-fit max-lg:w-full;
+    @apply w-80 px-6 pb-8 pt-24 flex flex-col justify-center items-center bg-gradient-to-b from-primary via-white to-primary border-4 border-neutral-800 shadow-2xl rounded-[32px] relative z-0 h-fit max-lg:w-full hover:shadow-[0_10px_25px_rgba(0,0,0,0.25)] transition-all duration-300 ease-in-out;
   }
 
   .profile_title {
