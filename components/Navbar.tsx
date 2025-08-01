@@ -13,8 +13,8 @@ const Navbar = async () => {
       <nav className="max-w-7xl mx-auto flex justify-between items-center">
         <Link href="/" className="transition-transform hover:scale-105">
           <h1 className="text-2xl font-bold flex items-center">
-            JD
-            <span className="text-primary ml-1">Startups</span>
+            Zero2
+            <span className="text-primary ml-1">Next</span>
             <TrendingUp size={24} className="text-primary ml-0.5" />
           </h1>
         </Link>

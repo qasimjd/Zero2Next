@@ -57,8 +57,9 @@ const workSans = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "JD Startups",
-  description: "Pitch, Vote and Grow",
+  title: "Zero2Next",
+  description: "A Next.js 14 starter template with Sanity.io",
+  viewport: "width=device-width, initial-scale=1",
 };
 
 export default function RootLayout({

@@ -22,23 +22,26 @@ const StartupForm = () => {
     setIsSubmitting(true);
     setErrors({});
 
-    const formData = new FormData(event.currentTarget);
-
-    const formValues = {
-      title: formData.get("title") as string,
-      description: formData.get("description") as string,
-      category: formData.get("category") as string,
-      link: formData.get("link") as string,
-      pitch,
-    };
-
     try {
+      const formData = new FormData(event.currentTarget);
+
+      const formValues = {
+        title: formData.get("title") as string,
+        description: formData.get("description") as string,
+        category: formData.get("category") as string,
+        link: formData.get("link") as string,
+        pitch,
+      };
+
+      // Client-side validation
       await formSchema.parseAsync(formValues);
 
       const result = await createPitch(formData, pitch);
 
       if (result?.status === "SUCCESS") {
         router.push(`/startup/${result._id}`);
+      } else {
+        setErrors({ form: result?.error || "Failed to create startup" });
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -54,6 +57,7 @@ const StartupForm = () => {
         setErrors(formattedErrors);
       } else {
         console.error("Unexpected error:", error);
+        setErrors({ form: "An unexpected error occurred. Please try again." });
       }
     } finally {
       setIsSubmitting(false);
@@ -65,6 +69,12 @@ const StartupForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="startup-form">
+      {errors.form && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
+          {errors.form}
+        </div>
+      )}
+      
       <div>
         <label htmlFor="title" className="startup-form_label">Title</label>
         <Input
@@ -115,18 +125,26 @@ const StartupForm = () => {
 
       <div data-color-mode="light">
         <label htmlFor="pitch" className="startup-form_label">Pitch</label>
-        <MDEditor
-          value={pitch}
-          onChange={(value) => setPitch(value || "")}
-          preview="edit"
-          height={300}
-          id="pitch"
-          style={{ borderRadius: 20, overflow: "hidden" }}
-          textareaProps={{
-            placeholder: "Briefly describe your idea and the problem it solves",
-          }}
-          previewOptions={{ disallowedElements: ["style"] }}
-        />
+        <div className="w-full overflow-hidden">
+          <MDEditor
+            value={pitch}
+            onChange={(value) => setPitch(value || "")}
+            preview="edit"
+            height={300}
+            id="pitch"
+            style={{ 
+              borderRadius: 20, 
+              overflow: "hidden",
+              width: "100%",
+              maxWidth: "100%"
+            }}
+            textareaProps={{
+              placeholder: "Briefly describe your idea and the problem it solves",
+              style: { fontSize: "16px" }
+            }}
+            previewOptions={{ disallowedElements: ["style"] }}
+          />
+        </div>
         {renderError("pitch")}
       </div>
 
