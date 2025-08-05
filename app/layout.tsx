@@ -58,12 +58,7 @@ const workSans = localFont({
 
 export const metadata: Metadata = {
   title: "Zero2Next",
-  description: "A Next.js 14 starter template with Sanity.io",
-};
-
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
+  description: "Start your Business journey with Zero2Next",
 };
 
 export default function RootLayout({
@@ -75,7 +70,6 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={workSans.variable}>
         {children}
-
         <SanityLive />
       </body>
     </html>
