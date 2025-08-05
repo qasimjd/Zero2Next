@@ -10,12 +10,40 @@ import MDEditor from "@uiw/react-md-editor";
 import { formSchema } from "@/lib/validation";
 import { z } from "zod";
 import { createPitch } from "@/lib/actions";
+import FileUpload from "./ui/file-upload";
 
 const StartupForm = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [pitch, setPitch] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string>("");
   const router = useRouter();
+
+  const handleUploadImage = async (file: File) => {
+    try {
+      setErrors({});
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/upload-image', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setImageUrl(data.url);
+        console.log("Image uploaded successfully:", data.url);
+      } else {
+        console.error("Upload failed:", data.error);
+        setErrors({ image: data.error || "Failed to upload image" });
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      setErrors({ image: "Failed to upload image" });
+    }
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,14 +57,24 @@ const StartupForm = () => {
         title: formData.get("title") as string,
         description: formData.get("description") as string,
         category: formData.get("category") as string,
-        link: formData.get("link") as string,
+        link: imageUrl,
         pitch,
       };
 
-      // Client-side validation
+      if (!imageUrl) {
+        setErrors({ image: "Please upload an image" });
+        return;
+      }
+
       await formSchema.parseAsync(formValues);
 
-      const result = await createPitch(formData, pitch);
+      const submissionData = new FormData();
+      submissionData.append("title", formValues.title);
+      submissionData.append("description", formValues.description);
+      submissionData.append("category", formValues.category);
+      submissionData.append("link", imageUrl);
+
+      const result = await createPitch(submissionData, pitch);
 
       if (result?.status === "SUCCESS") {
         router.push(`/startup/${result._id}`);
@@ -47,13 +85,13 @@ const StartupForm = () => {
       if (error instanceof z.ZodError) {
         const fieldErrors = error.flatten().fieldErrors;
         const formattedErrors: Record<string, string> = {};
-        
+
         Object.entries(fieldErrors).forEach(([key, value]) => {
           if (value && value.length > 0) {
             formattedErrors[key] = value[0];
           }
         });
-        
+
         setErrors(formattedErrors);
       } else {
         console.error("Unexpected error:", error);
@@ -74,7 +112,7 @@ const StartupForm = () => {
           {errors.form}
         </div>
       )}
-      
+
       <div>
         <label htmlFor="title" className="startup-form_label">Title</label>
         <Input
@@ -112,16 +150,14 @@ const StartupForm = () => {
       </div>
 
       <div>
-        <label htmlFor="link" className="startup-form_label">Image URL</label>
-        <Input
-          id="link"
-          name="link"
-          placeholder="Image URL"
-          required
-          className="startup-form_input"
+        <label htmlFor="link" className="startup-form_label">Image Upload</label>
+        <FileUpload
+          onUploadSuccess={handleUploadImage}
+          onUploadError={(error) => setErrors({ image: error })}
         />
-        {renderError("link")}
+        {renderError("image")}
       </div>
+
 
       <div data-color-mode="light">
         <label htmlFor="pitch" className="startup-form_label">Pitch</label>
@@ -132,8 +168,8 @@ const StartupForm = () => {
             preview="edit"
             height={300}
             id="pitch"
-            style={{ 
-              borderRadius: 20, 
+            style={{
+              borderRadius: 20,
               overflow: "hidden",
               width: "100%",
               maxWidth: "100%"

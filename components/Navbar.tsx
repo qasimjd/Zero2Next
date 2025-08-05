@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { auth, signOut, signIn } from "@/auth";
-import { BadgePlus, LogOut, TrendingUp } from "lucide-react";
+import { BadgePlus, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "./ui/button";
 import LogoutConfirmationDialog from "./ui/LogoutConfirmationDialog";
+import Image from "next/image";
 
 const Navbar = async () => {
   const session = await auth();
@@ -21,7 +22,13 @@ const Navbar = async () => {
           <h1 className="text-2xl font-bold flex items-center">
             Zero2
             <span className="text-primary ml-1">Next</span>
-            <TrendingUp size={24} className="text-primary ml-0.5" />
+            <Image
+              src="/logo.svg"
+              alt="Logo"
+              width={32}
+              height={32}
+              className="ml-1"
+            />
           </h1>
         </Link>
 
@@ -34,7 +41,7 @@ const Navbar = async () => {
                 aria-label="Create startup"
               >
                 <Button variant="default" className="max-sm:hidden text-white">
-                  <BadgePlus className="size-4 mr-2" />
+                  <BadgePlus className="size-4" />
                   Create
                 </Button>
                 <BadgePlus className="size-6 sm:hidden text-primary" />
@@ -54,7 +61,7 @@ const Navbar = async () => {
                 <LogoutConfirmationDialog onConfirm={handleLogout}>
                   <Button
                     variant="ghost"
-                    className="max-sm:p-1 hover:bg-red-50 hover:text-red-600 transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 p-2 rounded-lg"
+                    className="max-sm:p-1 hover:bg-red-50 text-red-600 transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 p-2 rounded-lg"
                     aria-label="Logout"
                   >
                     <LogOut className="size-5 sm:ml-2 max-sm:text-red-500" />
