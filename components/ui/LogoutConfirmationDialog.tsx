@@ -57,7 +57,7 @@ export default function LogoutConfirmationDialog({ onConfirm, children }: Logout
 
             {/* Dialog Body */}
             <p className="text-gray-600 mb-6">
-              Are you sure you want to logout? You'll need to sign in again to access your account.
+              Are you sure you want to logout? You&apos;ll need to sign in again to access your account.
             </p>
 
             {/* Dialog Actions */}
