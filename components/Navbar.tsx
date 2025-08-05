@@ -3,10 +3,16 @@ import { auth, signOut, signIn } from "@/auth";
 import { BadgePlus, LogOut, TrendingUp } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "./ui/button";
+import LogoutConfirmationDialog from "./ui/LogoutConfirmationDialog";
 
 const Navbar = async () => {
   const session = await auth();
   const user = session?.user;
+
+  const handleLogout = async () => {
+    "use server";
+    await signOut({ redirectTo: "/" });
+  };
 
   return (
     <header className="sticky top-0 z-50 px-5 py-3 bg-white shadow-sm font-work-sans">
@@ -45,22 +51,15 @@ const Navbar = async () => {
                   </Avatar>
                 </Link>
 
-                <form
-                  action={async () => {
-                    "use server";
-                    await signOut({ redirectTo: "/" });
-                  }}
-                >
+                <LogoutConfirmationDialog onConfirm={handleLogout}>
                   <Button
-                    type="submit"
                     variant="ghost"
-                    className="max-sm:p-1 hover:bg-red-50 hover:text-red-600 transition-colors"
+                    className="max-sm:p-1 hover:bg-red-50 hover:text-red-600 transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 p-2 rounded-lg"
                     aria-label="Logout"
                   >
-                    <span className="max-sm:hidden">Logout</span>
                     <LogOut className="size-5 sm:ml-2 max-sm:text-red-500" />
                   </Button>
-                </form>
+                </LogoutConfirmationDialog>
               </div>
             </>
           ) : (
